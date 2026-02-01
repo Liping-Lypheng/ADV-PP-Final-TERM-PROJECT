@@ -1,0 +1,46 @@
+{% extends 'master.html' %}
+
+{% block content %}
+<div class="cart-container">
+  <h2 class="cart-title">Your Cart</h2>
+  <div class="cart-item">
+    <img src="{{ item['image'] }}" alt="{{ item['image'] }}" class="product-card">
+    <div>
+      <h4>>{{ item['title'] }}</h4>
+      <p>{{ item['Description'] }}</p>
+    </div>
+    <div class="item-quantity">
+      <button class="quantity-btn">-</button>
+      <span class="quantity-display">{{ item.quantity }}</span>
+      <button class="quantity-btn">+</button>
+    </div>
+    <span>{{ item['price'] }}</span>
+    <button class="quantity-btn" style="background-color:#e11d48;">×</button>
+  </div>
+    <a href="/products" style="color:#4f46e5; display:block; margin-top:1rem;">Continue Shopping</a>
+
+  <div class="cart-summary">
+    <h3>Order Summary</h3>
+    <p>Subtotal: </p>
+    <p><strong>Total: </strong></p>
+    <button class="checkout-btn">Proceed to Checkout</button>
+  </div>
+    </div>
+{% endblock %}
+
+{% block custom_script %}
+    <script>
+        let item_box = document.getElementById('item_box')
+        let carts = JSON.parse(localStorage.getItem('carts') ?? '[]')
+        let cart_item = ``
+        let total = 0
+        carts.forEach((item,index)=>{
+            total += (item.price * item.qty)
+        cart_item += ``
+        })
+        document.getElementById('label_total_usd').innerHTML = `$${total.toFixed(2)}`
+        document.getElementById('label_total_usd').innerHTML = `$${(total * 4100).toLocaleString()}`
+        item_box.innerHTML = ''
+        item_box.innerHTML = cart_item
+    </script>
+{% endblock %}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lypheng Store</title>
+    <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <span class="logo-dot"></span>
+          <h1 class="logo-text"><a href="/">Lypheng Store</a></h1>
+      </div>
+      <nav class="main-nav">
+        <a href="/" class="btn btn-outline {{ 'active' if module == 'home' }}">Home</a>
+        <a href="/products" class="btn btn-outline {{ 'active' if module == 'products' }}">Products</a>
+        <a href="/about" class="btn btn-outline {{ 'active' if module == 'about' }}">About</a>
+        <a href="/contact" class="btn btn-outline {{ 'active' if module == 'contact' }}">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <input type="search" placeholder="Search headphones..." aria-label="Search" />
+          <a href="/cart">
+            <button id="btn_cart" class="btn btn-outline relative {{ 'active' if module == 'cart' }}"> Cart (0)</button>
+        </a>
+          <a href="/login">
+            <button id="btn_cart" class="btn btn-outline">Logout</button>
+        </a>
+      </div>
+    </div>
+  </header>
+      {% block content %}
+
+      {% endblock %}
+        <br>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2025 Shopcart. All rights reserved.</p>
+      <nav class="footer-nav">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="/contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+{% block custom_script %}
+
+{% endblock %}
+<script>
+    function CountCartItem(){
+    let carts_count = (JSON.parse(localStorage.getItem('carts') ?? '[]')).length
+    document.getElementById('btn_cart').innerText = `Cart(${carts_count})`
+    }
+    CountCartItem()
+    </script>
+</body>
+</html>

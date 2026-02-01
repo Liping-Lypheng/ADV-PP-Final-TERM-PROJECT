@@ -1,0 +1,110 @@
+{% extends 'master.html' %}
+{% block content %}
+<div class="cart-container">
+    <div class="cart-items">
+        <h2>Your Cart</h2>
+        <div id="item_box"></div>
+        <a href="/products" class="continue-shopping">Continue Shopping</a>
+    </div>
+    <div class="summary">
+        <h3>Order Summary</h3>
+        <div class="summary-row">
+            <span class="summary-total">Total USD:</span>
+            <strong id="label_total_usd" class="summary-total">$0</strong>
+        </div>
+        <div class="summary-row">
+            <span class="summary-total">Total KHR:</span>
+            <strong id="label_total_khr" class="summary-total">៛0</strong>
+        </div>
+        <a href="/checkout" class="checkout-btn">Proceed to Checkout</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block custom_script %}
+<script>
+function RenderCart() {
+    let item_box = document.getElementById('item_box')
+    let cart = JSON.parse(localStorage.getItem('carts') || '[]')
+
+    let cart_item_html = ''
+    let total = 0
+
+    if (cart.length === 0) {
+        item_box.innerHTML = "<p>Your cart is empty.</p>"
+    } else {
+        cart.forEach((item) => {
+            let price = parseFloat(item.price) || 0
+            let qty = parseInt(item.qty) || 1
+            const itemTotal = price * qty
+            total += itemTotal
+
+            cart_item_html += `
+                <div class="cart-item" data-id="${item.id}">
+                    <div class="item-details">
+                        <div class="cart-item-title">${item.title}</div>
+                    </div>
+                    <div class="quantity">
+                        <button class="qty-minus">-</button>
+                        <input type="number" value="${qty}" readonly>
+                        <button class="qty-plus">+</button>
+                    </div>
+                    <div class="cart-item-price">$${itemTotal.toFixed(2)}</div>
+                    <button class="remove-btn">Remove</button>
+                </div>
+            `;
+        });
+
+        item_box.innerHTML = cart_item_html;
+    }
+
+    // event bindings
+    document.querySelectorAll('.qty-minus').forEach(btn => {
+        btn.addEventListener('click', function() {
+            let id = this.closest('.cart-item').dataset.id
+            updateCartQuantity(id, -1)
+        })
+    })
+    document.querySelectorAll('.qty-plus').forEach(btn => {
+        btn.addEventListener('click', function() {
+            let id = this.closest('.cart-item').dataset.id
+            updateCartQuantity(id, 1)
+        })
+    })
+    document.querySelectorAll('.remove-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            let id = this.closest('.cart-item').dataset.id
+            removeFromCart(id)
+        })
+    })
+
+    // totals
+    let total_khr = Math.ceil(total * 4100 / 100) * 100
+    document.getElementById('label_total_usd').innerText = `$${total.toFixed(2)}`
+    document.getElementById('label_total_khr').innerText = `៛${total_khr.toLocaleString()}`
+}
+
+function updateCartQuantity(productId, change) {
+    let cart = JSON.parse(localStorage.getItem('carts') || '[]');
+    const item = cart.find(i => String(i.id) === String(productId))
+    if (item) {
+        item.qty += change
+        if (item.qty <= 0) {
+            cart = cart.filter(i => String(i.id) !== String(productId))
+        }
+        localStorage.setItem('carts', JSON.stringify(cart))
+        RenderCart()
+    }
+}
+
+function removeFromCart(productId) {
+    let cart = JSON.parse(localStorage.getItem('carts') || '[]')
+    cart = cart.filter(item => String(item.id) !== String(productId))
+    localStorage.setItem('carts', JSON.stringify(cart))
+    RenderCart()
+}
+
+// Initialize once DOM ready
+document.addEventListener('DOMContentLoaded', RenderCart)
+</script>
+{% endblock %}

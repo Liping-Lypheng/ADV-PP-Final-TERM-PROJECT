@@ -1,0 +1,67 @@
+{% extends 'master.html' %}
+
+{% block content %}
+<div class="detail-product">
+    <div class="detail-product-content">
+        <div class="product-image-container">
+            <div class="category-badge">{{ product.category if product.category else 'Product' }}</div>
+            <img
+                src="{{ url_for('static', filename='product_upload/' + product.image) }}"
+                alt="{{ product.name }}"
+                class="product-image-large"
+            >
+        </div>
+
+        <div class="details-product">
+            <h1 class="product-title">{{ product.name }}</h1>
+            <p class="product-description">{{ product.description }}</p>
+
+            <div class="product-price">
+                <span>${{ product.price|float }}</span>
+            </div>
+
+            <div class="action-buttons">
+                <button
+                    type="button"
+                    class="btn btn-primary add-cart-btn js-add-cart"
+                    data-id="{{ product.id }}"
+                    data-title="{{ product.name }}"
+                    data-image="{{ product.image }}"
+                    data-price="{{ product.price|float }}"
+                >
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block custom_script %}
+    <script>
+        let carts = JSON.parse(localStorage.getItem('carts') ?? '[]')
+        document.querySelectorAll('.add-cart-btn').forEach(item=>{
+            item.addEventListener('click',function (){
+                let id = this.getAttribute('data-id')
+                let title = this.getAttribute('data-title')
+                let img = this.getAttribute('data-img')
+                let price = this.getAttribute('data-price')
+                let dpl_index = carts.findIndex(cart => cart.id === id)
+                if (dpl_index !== -1){
+                    carts[dpl_index].qty += 1
+                    localStorage.setItem('carts',JSON.stringify(carts))
+                    return
+                }else{
+                carts.push({
+                    'id' : id,
+                    'title' : title,
+                    'qty': 1,
+                    'img': img,
+                    'price': price
+                })
+                }
+                localStorage.setItem('carts',JSON.stringify(carts))
+            })
+        })
+    </script>
+{% endblock %}

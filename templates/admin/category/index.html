@@ -1,0 +1,67 @@
+{% extends 'admin/layout.html' %}
+{% block content %}
+    <main class="app-main">
+        <div class="app-content-header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6"><h3 class="mb-0">Category Page</h3></div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-end">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Category</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="app-content">
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <a
+                                href="{{ url_for('category_form',status='add') }}"
+                                type="button"
+                                class="btn btn-outline-primary"
+                        >
+                            Add Category</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-borderless table-striped align-middle">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for category in categories %}
+                                    <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ category.name }}</td>
+                                    <td>
+                                        <a
+                                                href="{{ url_for('category_form', category_id=category.id, status='edit') }}"
+                                                type="button"
+                                                class="btn btn-sm btn-primary"
+                                        >
+                                            Edit</a>
+                                        <a
+                                                href="{{ url_for('category_confirm', category_id = category.id) }}"
+                                                type="button"
+                                                class="btn btn-sm btn-danger"
+                                        >
+                                            Delete</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

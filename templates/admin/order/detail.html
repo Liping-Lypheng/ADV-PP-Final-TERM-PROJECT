@@ -1,0 +1,56 @@
+{% extends 'admin/layout.html' %}
+{% block content %}
+<main class="app-main">
+    <div class="app-content-header">
+        <div class="container-fluid d-flex justify-content-between">
+            <h3>Order #{{ order.id }}</h3>
+            <a href="{{ url_for('admin_order') }}" class="btn btn-sm btn-outline-secondary">Back to List</a>
+        </div>
+    </div>
+
+    <div class="app-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-header">Order Info</div>
+                        <div class="card-body">
+                            <p><strong>Customer ID:</strong> #{{ order.customer_id }}</p>
+                            <p><strong>Date:</strong> {{ order.date_time.strftime('%B %d, %Y %H:%M') }}</p>
+                            <hr>
+                            <form action="{{ url_for('delete_order', order_id=order.id) }}" method="POST" onsubmit="return confirm('Delete this order?');">
+                                <button type="submit" class="btn btn-danger btn-sm w-100">Delete Permanently</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body p-0">
+                            <table class="table mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Product ID</th>
+                                        <th>Qty</th>
+                                        <th class="text-end">Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in order.order_items %}
+                                    <tr>
+                                        <td>#{{ item.product_id }}</td>
+                                        <td>{{ item.quantity }}</td>
+                                        <td class="text-end">${{ item.price }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

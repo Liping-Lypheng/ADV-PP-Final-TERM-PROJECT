@@ -1,0 +1,40 @@
+{% extends "master.html" %}
+
+{% block content %}
+<style>
+    .error-container {
+        text-align: center;
+        padding: 3rem 0;
+    }
+
+    .error-code {
+        font-size: 8rem;
+        font-weight: bold;
+        color: #e74c3c;
+        margin-bottom: 1rem;
+    }
+
+    .error-message {
+        font-size: 1.5rem;
+        color: #7f8c8d;
+        margin-bottom: 2rem;
+    }
+
+    .error-description {
+        color: #95a5a6;
+        margin-bottom: 3rem;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+
+<div class="error-container">
+    <div class="error-code">404</div>
+    <h2 class="error-message">Product Not Found</h2>
+    <p class="error-description">
+        Sorry, the product you're looking for doesn't exist or has been removed from our catalog.
+    </p>
+    <a href="/static" class="btn btn-primary">Browse All Products</a>
+</div>
+{% endblock %}

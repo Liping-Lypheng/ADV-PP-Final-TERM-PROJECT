@@ -1,0 +1,109 @@
+{% extends 'master.html' %}
+
+{% block content %}
+    <!-- Hero / Promo -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <h2>Grab Upto 50% Off On Selected Headphone</h2>
+        <p>Premium sound, comfortable fit, and prices that make you smile. Limited-time offers on top brands.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary">Shop Deals</button>
+          <button class="btn btn-ghost">Learn More</button>
+        </div>
+      </div>
+      <div class="hero-art">
+        <!-- Replace with your image -->
+        <img src="/static/images/1.jpg" alt="Person wearing headphones" />
+      </div>
+    </div>
+  </section>
+
+  <main class="container layout">
+    <!-- Products -->
+    <section class="products">
+      <div class="section-header">
+        <h3>Recommend For You!</h3>
+        <div class="filters">
+          <label>
+            <span>Sort:</span>
+            <select aria-label="Sort products">
+              <option>Popular</option>
+              <option>Price: Low to High</option>
+              <option>Price: High to Low</option>
+              <option>Newest</option>
+            </select>
+          </label>
+          <label>
+            <span>Category:</span>
+            <select aria-label="Filter by category">
+              <option>All</option>
+              <option>Wireless</option>
+              <option>Gaming</option>
+              <option>Studio</option>
+              <option>Earbuds</option>
+            </select>
+          </label>
+        </div>
+      </div>
+    </section>
+  </main>
+<div class="product-grid">
+    {% for item in products %}
+    <article class="card">
+
+        <a href="/product/{{ item.id }}">
+            <img src="{{ url_for('static', filename='product_upload/' + item.image) }}" alt="{{ item.name }}" />
+        </a>
+
+        <h4 class="card-title">{{ item.name }}</h4>
+
+        <p class="card-meta">{{ item.category.name }}</p>
+
+        <div class="price-row">
+            <span class="price">${{ item.price|float }}</span>
+        </div>
+
+        <button
+            class="btn btn-success add-cart-btn js-add-cart"
+            data-id="{{ item.id }}"
+            data-title="{{ item.name }}"
+            data-img="{{ item.image }}"
+            data-price="{{ item.price|float }}"
+        >
+            Add to Cart
+        </button>
+    </article>
+{% endfor %}
+</div>
+{% endblock %}
+
+{% block custom_script %}
+    <script>
+        let carts = JSON.parse(localStorage.getItem('carts') ?? '[]')
+        document.querySelectorAll('.add-cart-btn').forEach(item=>{
+            item.addEventListener('click',function (){
+                let id = this.getAttribute('data-id')
+                let title = this.getAttribute('data-title')
+                let img = this.getAttribute('data-img')
+                let price = this.getAttribute('data-price')
+                let dpl_index = carts.findIndex(cart => cart.id === id)
+                if (dpl_index !== -1){
+                    carts[dpl_index].qty += 1
+                    localStorage.setItem('carts',JSON.stringify(carts))
+                    return
+                }else{
+                    carts.push({
+                    'id' : id,
+                    'title' : title,
+                    'qty': 1,
+                    'img': img,
+                    'price': price
+                })
+                }
+                localStorage.setItem('carts',JSON.stringify(carts))
+                CountCartItem()
+            })
+        })
+    </script>
+{% endblock %}

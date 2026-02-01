@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        :root {
+            --bg: #f4ede4;
+            --surface: #ffffff;
+            --text: #2b2b2b;
+            --muted: #6b6b6b;
+            --green: #2e7d32;
+            --green-600: #256b29;
+            --outline: #d8d0c7;
+            --shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.5;
+        }
+
+        /* Login Container */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Login Card */
+        .login-card {
+            background: var(--surface);
+            border: 1px solid var(--outline);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .login-card h2 {
+            margin: 0 0 8px;
+            font-size: 28px;
+            color: var(--text);
+        }
+
+        .login-card > p {
+            color: var(--muted);
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+
+        /* Error Message */
+        .error-message {
+            background-color: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #c33;
+            text-align: left;
+            font-size: 14px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2e7d32;
+            text-align: left;
+            font-size: 14px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        /* Form */
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .login-form > div {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .login-form label {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .login-form input[type="text"],
+        .login-form input[type="password"],
+        .login-form input[type="email"] {
+            padding: 12px;
+            border: 1px solid var(--outline);
+            border-radius: 8px;
+            background-color: #faf7f3;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .login-form input:focus {
+            outline: none;
+            border-color: var(--green);
+        }
+
+        /* Remember & Forgot */
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            margin-top: -8px;
+        }
+
+        .remember-forgot label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        .remember-forgot input[type="checkbox"] {
+            cursor: pointer;
+        }
+
+        .remember-forgot a {
+            color: var(--green);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .remember-forgot a:hover {
+            text-decoration: underline;
+        }
+
+        /* Button */
+        .btn-login {
+            background: linear-gradient(to right, #2e7d32, #43a047);
+            color: #fff;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            font-family: inherit;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+            background: linear-gradient(to right, #256b29, #388e3c);
+        }
+
+        .btn-login:active {
+            transform: translateY(0);
+        }
+
+        .btn-login:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Footer */
+        .login-footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .login-footer a {
+            color: var(--green);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .login-card {
+                padding: 28px 20px;
+            }
+
+            .login-card h2 {
+                font-size: 24px;
+            }
+
+            .remember-forgot {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <h2>Welcome Back</h2>
+            <p>Please login to your account</p>
+
+            <div id="errorMessage" class="error-message"></div>
+            <div id="successMessage" class="success-message"></div>
+
+            <form id="loginForm" class="login-form" method="post" action="{{ url_for('do_login') }}">
+                <div>
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+
+                <div>
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+
+                <div class="remember-forgot">
+                    <label>
+                        <input type="checkbox" name="remember" id="remember"> Remember me
+                    </label>
+                    <a href="#" onclick="event.preventDefault(); alert('Password reset feature coming soon!');">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn-login" id="loginBtn">Login</button>
+            </form>
+
+            <div class="login-footer">
+                Don't have an account? <a href="#" onclick="event.preventDefault(); alert('Registration feature coming soon!');">Sign up</a>
+            </div>
+        </div>
+    </div>
+
+{#    <script>#}
+{#        // API Base URL - Change this to your backend URL#}
+{#        const API_URL = 'http://127.0.0.1:5000';#}
+{##}
+{#        // Show error message#}
+{#        function showError(message) {#}
+{#            const errorBox = document.getElementById('errorMessage');#}
+{#            const successBox = document.getElementById('successMessage');#}
+{##}
+{#            successBox.classList.remove('show');#}
+{#            errorBox.textContent = message;#}
+{#            errorBox.classList.add('show');#}
+{##}
+{#            setTimeout(() => {#}
+{#                errorBox.classList.remove('show');#}
+{#            }, 5000);#}
+{#        }#}
+{##}
+{#        // Show success message#}
+{#        function showSuccess(message) {#}
+{#            const errorBox = document.getElementById('errorMessage');#}
+{#            const successBox = document.getElementById('successMessage');#}
+{##}
+{#            errorBox.classList.remove('show');#}
+{#            successBox.textContent = message;#}
+{#            successBox.classList.add('show');#}
+{##}
+{#            setTimeout(() => {#}
+{#                successBox.classList.remove('show');#}
+{#            }, 5000);#}
+{#        }#}
+{##}
+{#        // Handle Login Form Submission#}
+{#        document.getElementById('loginForm').addEventListener('submit', async (e) => {#}
+{#            e.preventDefault();#}
+{##}
+{#            const username = document.getElementById('username').value;#}
+{#            const password = document.getElementById('password').value;#}
+{#            const loginBtn = document.getElementById('loginBtn');#}
+{##}
+{#            // Disable button during request#}
+{#            loginBtn.disabled = true;#}
+{#            loginBtn.textContent = 'Logging in...';#}
+{##}
+{#            try {#}
+{#                const response = await fetch(`${API_URL}/login_confirm`, {#}
+{#                    method: 'POST',#}
+{#                    headers: {#}
+{#                        'Content-Type': 'application/json'#}
+{#                    },#}
+{#                    body: JSON.stringify({ username, password })#}
+{#                });#}
+{##}
+{#                const data = await response.json();#}
+{##}
+{#                if (response.ok) {#}
+{#                    // Store token if provided#}
+{#                    if (data.access_token) {#}
+{#                        sessionStorage.setItem('access_token', data.access_token);#}
+{#                    }#}
+{##}
+{#                    showSuccess('Login successful! Redirecting...');#}
+{##}
+{#                    // Redirect after short delay#}
+{#                    setTimeout(() => {#}
+{#                        window.location.href = '/';#}
+{#                    }, 1000);#}
+{#                } else {#}
+{#                    showError(data.msg || data.message || 'Login Failed. Please check your credentials.');#}
+{#                }#}
+{#            } catch (error) {#}
+{#                console.error('Login error:', error);#}
+{#                showError('Connection error. Please check if the server is running.');#}
+{#            } finally {#}
+{#                // Re-enable button#}
+{#                loginBtn.disabled = false;#}
+{#                loginBtn.textContent = 'Login';#}
+{#            }#}
+{#        });#}
+{##}
+{#        // Check if user is already logged in on page load#}
+{#        window.addEventListener('load', function() {#}
+{#            const token = sessionStorage.getItem('access_token');#}
+{#            if (token) {#}
+{#                // Optionally verify token with backend before redirecting#}
+{#                // For now, just redirect if token exists#}
+{#                // window.location.href = '/';#}
+{#            }#}
+{#        });#}
+{#    </script>#}
+</body>
+</html>

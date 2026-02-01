@@ -1,0 +1,69 @@
+{% extends 'admin/layout.html' %}
+{% block content %}
+    <main class="app-main">
+        <div class="app-content-header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6"><h3 class="mb-0">User Page</h3></div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-end">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">User</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="app-content">
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <a
+                                href="{{ url_for('user') }}"
+                                type="button"
+                                class="btn btn-outline-secondary"
+                        >
+                            Back to User List</a>
+                    </div>
+                    <div class="card-body ">
+                        <form action="{{ url_for('user_add') if status == 'add' else url_for('user_updates') }}"
+                              method="post">
+                            <input type="hidden" name="user_id" value="{{ user.id }}">
+                            <div class="form-group">
+                                <label for="username">User Name</label>
+                                <input type="text" class="form-control" name="username"
+                                       value="{{ user.username if status == 'edit' }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="username">Email</label>
+                                <input type="email" class="form-control" name="email"
+                                       value="{{ user.email if status == 'edit' }}">
+                            </div>
+                            {% if status == 'add' %}
+                                <div class="form-group">
+                                    <label for="username">Password</label>
+                                    <input type="password" class="form-control" name="password">
+                                </div>
+                                <div class="form-group">
+                                    <label for="role">Role</label>
+                                    <select class="form-control" name="role" id="role">
+                                        <option value="user">user</option>
+                                        <option value="admin">admin</option>
+                                    </select>
+                                </div>
+                            {% endif %}
+                            <br>
+                            <button type="reset" class="btn btn-danger float-left">Reset</button>
+                            {% if status == 'add' %}
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            {% endif %}
+                            {% if status == 'edit' %}
+                                <button type="submit" class="btn btn-warning">Update</button>
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'admin/layout.html' %}
+{% block content %}
+    <main class="app-main">
+        <div class="app-content-header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6"><h3 class="mb-0">Category Page</h3></div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-end">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Category</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="app-content">
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <a
+                                href="{{ url_for('admin_category') }}"
+                                type="button"
+                                class="btn btn-outline-secondary"
+                        >
+                            Back to Category List</a>
+                    </div>
+                    <div class="card-body ">
+                        <form action="{{ url_for('category_add') if status == 'add' else url_for('category_updates') }}" method="post">
+                        <input type="hidden" name="category_id" value="{{ category.id }}">
+                            <div class="form-group">
+                                <label for="name">Category Name</label>
+                                <input type="text" class="form-control" name="name" value="{{ category.name if status == 'edit' }}">
+                            </div>
+                            <br>
+                            <button type="reset" class="btn btn-danger float-left">Reset</button>
+                            {% if status == 'add' %}
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            {% endif %}
+                            {% if status == 'edit' %}
+                                <button type="submit" class="btn btn-warning">Update</button>
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
