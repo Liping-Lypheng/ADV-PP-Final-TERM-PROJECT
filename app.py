@@ -32,7 +32,7 @@ password = "Root123@!"
 encoded_password = urllib.parse.quote_plus(password)
 
 # Construct the URI
-app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql://app:{encoded_password}@localhost/app"
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql://public:{encoded_password}@localhost/app"
 DB_CONFIG= {
     'host': 'localhost',
     'user': 'public',
