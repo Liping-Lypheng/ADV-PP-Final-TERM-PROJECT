@@ -26,7 +26,7 @@ jwt = JWTManager(app)
 REVOKED_JTIS = set()
 
 # Your actual password
-password = "Admin123@#"
+password = "Root123@!"
 
 # URL-encode the password
 encoded_password = urllib.parse.quote_plus(password)
@@ -35,8 +35,8 @@ encoded_password = urllib.parse.quote_plus(password)
 app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql://app:{encoded_password}@localhost/app"
 DB_CONFIG= {
     'host': 'localhost',
-    'user': 'root',
-    'password': 'Admin123@#',
+    'user': 'public',
+    'password': 'Root123@!',
     'database': 'app',
 }
 
