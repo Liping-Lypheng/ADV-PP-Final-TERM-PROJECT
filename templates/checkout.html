@@ -27,38 +27,61 @@
         <div class="billing-address">
             <h1>Checkout</h1>
             <h2>Billing Address</h2>
+
             <form method="POST" action="/proceed" id="checkout-box">
                 <label for="inputname">Full Name *</label>
-                <input type="text" name="name" required placeholder="John Doe">
+                <input
+                        type="text"
+                        name="name"
+                        required
+                        placeholder="John Doe"
+                >
 
                 <label for="inputemail">Email *</label>
-                <input type="email" name="email" required placeholder="john@example.com">
+                <input
+                        type="email"
+                        name="email"
+                        required
+                        placeholder="john@example.com"
+                >
 
                 <label for="inputphone">Phone Number *</label>
-                <input type="text" name="phone" required placeholder="+855 12 345 678">
+                <input
+                        type="text"
+                        name="phone"
+                        required
+                        placeholder="+855 12 345 678"
+                >
 
                 <label for="inputaddress">Address *</label>
-                <input type="text" name="address" required placeholder="Street 123, Phnom Penh">
+                <input
+                        type="text"
+                        name="address"
+                        required
+                        placeholder="Street 123, Phnom Penh"
+                >
+
                 <input type="hidden" id="cart_item" name="cart_item">
                 <button type="submit">Place Order</button>
             </form>
         </div>
+
     </div>
 {% endblock %}
 
 {% block custom_script %}
-<script>
-  let item_box = document.getElementById('item_box')
-  let carts = JSON.parse(localStorage.getItem('carts') ?? '[]')
-    document.getElementById('cart_item').value = JSON.stringify(carts)
-  let cart_item_html = ''
-  let total = 0
-  carts.forEach((item) => {
-    let price = parseFloat(item.price) || 0
-    let qty = parseFloat(item.qty) || 1
-    const itemTotal = qty * price
-    total += itemTotal
-    cart_item_html += `
+    <script>
+        let item_box = document.getElementById('item_box')
+        let carts = JSON.parse(localStorage.getItem('carts') ?? '[]')
+        document.getElementById('cart_item').value = JSON.stringify(carts)
+        let cart_item_html = ''
+        let total = 0
+        carts.forEach((item) => {
+            let price = parseFloat(item.price) || 0
+            let qty = parseFloat(item.qty) || 1
+            const itemTotal = qty * price
+            total += itemTotal
+            cart_item_html += `
       <div class="cart-item">
         <div class="item-details">
           <strong class="cart-item-title">${item.title}</strong>
@@ -70,15 +93,15 @@
         <div class="cart-item-price">= $${item.price * item.qty}</div>
       </div>
     `;
-  });
-  let total_khr = Math.ceil(total*4100 /100) *100
-  item_box.innerHTML = cart_item_html;
-  document.getElementById('label_subtotal').innerHTML = `$ ${total.toFixed(2)}`
-  document.getElementById('label_total_usd').innerHTML = `$ ${total.toFixed(2)}`
-  document.getElementById('label_total_kh').innerHTML =  `៛ ${total_khr.toLocaleString()}`
+        });
+        let total_khr = Math.ceil(total * 4100 / 100) * 100
+        item_box.innerHTML = cart_item_html;
+        document.getElementById('label_subtotal').innerHTML = `$ ${total.toFixed(2)}`
+        document.getElementById('label_total_usd').innerHTML = `$ ${total.toFixed(2)}`
+        document.getElementById('label_total_kh').innerHTML = `៛ ${total_khr.toLocaleString()}`
 
-  document.getElementById("checkout-box").addEventListener("submit", function() {
-        document.getElementById("cart-item").value = JSON.stringify(carts);
-    });
-</script>
+        document.getElementById("checkout-box").addEventListener("submit", function () {
+            document.getElementById("cart-item").value = JSON.stringify(carts);
+        });
+    </script>
 {% endblock %}

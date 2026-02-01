@@ -1,6 +1,8 @@
+from datetime import datetime
+
 from flask import Flask, render_template, request, jsonify
 import json
-from app import app,mail
+from app import app,mail,db
 from FunctionSend import chat_id
 from products import products_item
 from flask_mail import Mail,Message
@@ -8,7 +10,7 @@ from tabulate import tabulate
 import FunctionSend
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-
+from model import Order,OrderItem,Product
 
 @app.post('/proceed')
 def proceed():
@@ -17,7 +19,7 @@ def proceed():
     email = form.get('email')
     phone = form.get('phone')
     address = form.get('address')
-
+    created_at = form.get('created_at')
     cart_item_str = form.get('cart_item')
     if not cart_item_str:
         return jsonify({"error": "No cart data received"}), 400
@@ -29,6 +31,31 @@ def proceed():
 
     # ✅ Calculate total directly from cart_item
     total = sum(float(item.get('price', 0)) * float(item.get('qty', 1)) for item in cart_item)
+
+    new_order = Order(
+        user_id=None,
+        name=customer_name,
+        phone=phone,
+        email=email,
+        address=address,
+        total_amount=total,
+        created_at=datetime.utcnow()
+    )
+    db.session.add(new_order)
+    db.session.flush()
+
+    for item in cart_item:
+        order_item = OrderItem(
+            order_id=new_order.id,
+            product_id=item.get('id'),  # Assuming cart items have product IDs
+            price=float(item['price']),
+            qty=int(item['qty']),
+            total=float(item['price']) * int(item['qty'])
+        )
+        db.session.add(order_item)
+
+        # Commit all changes to database
+    db.session.commit()
 
     # Build item rows for table
     item_row = []
