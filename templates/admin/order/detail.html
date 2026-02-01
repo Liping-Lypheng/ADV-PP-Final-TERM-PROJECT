@@ -16,7 +16,7 @@
                         <div class="card-header">Order Info</div>
                         <div class="card-body">
                             <p><strong>Customer ID:</strong> #{{ order.customer_id }}</p>
-                            <p><strong>Date:</strong> {{ order.date_time.strftime('%B %d, %Y %H:%M') }}</p>
+                            <p><strong>Date:</strong> {{ order.created_at.strftime('%B %d, %Y %H:%M') }}</p>
                             <hr>
                             <form action="{{ url_for('delete_order', order_id=order.id) }}" method="POST" onsubmit="return confirm('Delete this order?');">
                                 <button type="submit" class="btn btn-danger btn-sm w-100">Delete Permanently</button>

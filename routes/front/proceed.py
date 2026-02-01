@@ -33,12 +33,11 @@ def proceed():
     total = sum(float(item.get('price', 0)) * float(item.get('qty', 1)) for item in cart_item)
 
     new_order = Order(
-        user_id=None,
+        user_id=1,
         name=customer_name,
         phone=phone,
         email=email,
         address=address,
-        total_amount=total,
         created_at=datetime.utcnow()
     )
     db.session.add(new_order)
